@@ -8,4 +8,8 @@ public:
 
     const Vector& GetCenter() const;
     double GetRadius() const;
+
+private:
+    Vector center_;
+    double radius_;
 };
