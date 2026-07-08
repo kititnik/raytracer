@@ -10,4 +10,7 @@ public:
 
     const Vector& operator[](size_t ind) const;
     double Area() const;
+
+private:
+    std::array<Vector, 3> sides_;
 };

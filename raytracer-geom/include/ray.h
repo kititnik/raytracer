@@ -8,4 +8,8 @@ public:
 
     const Vector& GetOrigin() const;
     const Vector& GetDirection() const;
+
+private:
+    Vector origin_;
+    Vector direction_;
 };
