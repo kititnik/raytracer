@@ -9,4 +9,9 @@ public:
     const Vector& GetPosition() const;
     const Vector& GetNormal() const;
     double GetDistance() const;
+
+private:
+    Vector position_;
+    Vector normal_;
+    double distance_;
 };
