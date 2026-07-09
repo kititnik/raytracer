@@ -46,3 +46,11 @@ double Length(const Vector& v) {
 Vector operator-(const Vector& a, const Vector& b) {
     return Vector(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 }
+
+Vector operator+(const Vector& a, const Vector& b) {
+    return Vector(a[0] + b[0], a[1] + b[1], a[2] + b[2]);
+}
+
+Vector operator*(const double scale, const Vector& v) {
+    return Vector(v[0] * scale, v[1] * scale, v[2] * scale);
+}

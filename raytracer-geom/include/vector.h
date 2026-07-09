@@ -18,6 +18,8 @@ private:
 };
 
 Vector operator-(const Vector& a, const Vector& b);
+Vector operator+(const Vector& a, const Vector& b);
+Vector operator*(const double scale, const Vector& v);
 double DotProduct(const Vector& a, const Vector& b);
 Vector CrossProduct(const Vector& a, const Vector& b);
 double Length(const Vector& v);
