@@ -1,7 +1,8 @@
 #include "triangle.h"
 #include "vector.h"
 
-Triangle::Triangle(const Vector& a, const Vector& b, const Vector& c) : sides_{a, b, c} {}
+Triangle::Triangle(const Vector& a, const Vector& b, const Vector& c) : sides_{a, b, c} {
+}
 
 const Vector& Triangle::operator[](size_t ind) const {
     return sides_.at(ind);

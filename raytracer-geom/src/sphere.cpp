@@ -1,6 +1,7 @@
 #include "sphere.h"
 
-Sphere::Sphere(const Vector& center, double radius) : center_(center), radius_(radius) {}
+Sphere::Sphere(const Vector& center, double radius) : center_(center), radius_(radius) {
+}
 
 const Vector& Sphere::GetCenter() const {
     return center_;
