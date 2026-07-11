@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <cstdint>
 #include "line_parser.h"
-#include "triangle.h"
+#include "../../raytracer-geom/triangle.h"
 
 size_t ResolveFaceTokenIndex(int idx, size_t arr_size);
 

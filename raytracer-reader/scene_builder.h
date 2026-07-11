@@ -7,7 +7,7 @@
 #include "light.h"
 #include "object.h"
 #include "scene.h"
-#include "vector.h"
+#include "../raytracer-geom/vector.h"
 
 class SceneBuilder {
 public:

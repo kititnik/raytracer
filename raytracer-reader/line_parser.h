@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 #include "light.h"
-#include "sphere.h"
-#include "vector.h"
+#include "../raytracer-geom/sphere.h"
+#include "../raytracer-geom/vector.h"
 
 struct FaceToken {
     int vertice_idx;

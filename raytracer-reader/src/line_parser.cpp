@@ -2,8 +2,8 @@
 #include <format>
 #include <string>
 #include "light.h"
-#include "sphere.h"
-#include "vector.h"
+#include "../../raytracer-geom/sphere.h"
+#include "../../raytracer-geom/vector.h"
 
 void TryStream(std::istringstream& ss, std::string error_msg, std::string file, int line);
 FaceToken ParseFaceToken(const std::string& token);

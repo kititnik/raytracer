@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vector.h"
+#include "../raytracer-geom/vector.h"
 
 #include <string>
 

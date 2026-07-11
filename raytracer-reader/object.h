@@ -2,10 +2,10 @@
 
 #include <array>
 #include <optional>
-#include "triangle.h"
+#include "../raytracer-geom/triangle.h"
 #include "material.h"
-#include "sphere.h"
-#include "vector.h"
+#include "../raytracer-geom/sphere.h"
+#include "../raytracer-geom/vector.h"
 
 struct Object {
     const Material* material = nullptr;

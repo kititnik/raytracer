@@ -1,7 +1,7 @@
 #include "materials_builder.h"
 #include "line_parser.h"
 #include "material.h"
-#include "vector.h"
+#include "../../raytracer-geom/vector.h"
 #include <string>
 
 void MaterialsBuilder::StartMaterial(std::istringstream& ss) {
