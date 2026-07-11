@@ -1,3 +1,5 @@
+#pragma once
+
 #include <filesystem>
 #include <sstream>
 #include <unordered_map>

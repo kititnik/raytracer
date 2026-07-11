@@ -1,8 +1,11 @@
 #include "scene_builder.h"
+#include <cstddef>
+#include <stdexcept>
+#include <cstdint>
 #include "line_parser.h"
 #include "triangle.h"
 
-int ResolveFaceTokenIndex(int idx, size_t arr_size);
+size_t ResolveFaceTokenIndex(int idx, size_t arr_size);
 
 SceneBuilder::SceneBuilder(const std::filesystem::path& path) {
     path_ = path;
@@ -26,7 +29,10 @@ void SceneBuilder::AddVertexNormals(std::istringstream& ss) {
 
 void SceneBuilder::AddFace(std::istringstream& ss) {
     auto parsed_tokens = ParseFace(ss);
-    for (size_t i = 1; i < parsed_tokens.size() - 1; i++) {
+    if (parsed_tokens.size() < 3) {
+        throw std::runtime_error("Face should have at least 3 vertices");
+    }
+    for (size_t i = 1; i + 1 < parsed_tokens.size(); i++) {
         Vector vertex_a =
             vertexes_[ResolveFaceTokenIndex(parsed_tokens[0].vertice_idx, vertexes_.size())];
         Vector vertex_b =
@@ -62,9 +68,8 @@ void SceneBuilder::AddPointLight(std::istringstream& ss) {
 
 void SceneBuilder::AddMtLib(std::istringstream& ss) {
     std::string mtl_path = ParseMaterialPath(ss);
-    // TODO: Fix after ReadMaterial() implementation
-    // auto mats = ReadMaterials(path_.parent_path().append(mtl_path));
-    // materials_.insert_range(mats);
+    auto mats = ReadMaterials(path_.parent_path().append(mtl_path));
+    materials_.insert_range(mats);
 }
 
 void SceneBuilder::AddUseMtl(std::istringstream& ss) {
@@ -75,9 +80,17 @@ void SceneBuilder::AddUseMtl(std::istringstream& ss) {
     current_material_ = &materials_[mat_name];
 }
 
-int ResolveFaceTokenIndex(int idx, size_t arr_size) {
-    if (idx < 0) {
-        return arr_size + idx;
+size_t ResolveFaceTokenIndex(int idx, size_t arr_size) {
+    int64_t resolved = 0;
+    if (idx == 0) {
+        throw std::runtime_error("Face index cannot be zero");
+    } else if (idx > 0) {
+        resolved = idx - 1;
+    } else if (idx < 0) {
+        resolved = static_cast<int64_t>(arr_size) + idx;
     }
-    return idx - 1;
+    if (resolved < 0 || static_cast<size_t>(resolved) >= arr_size) {
+        throw std::runtime_error("Face index out of range");
+    }
+    return static_cast<size_t>(resolved);
 }

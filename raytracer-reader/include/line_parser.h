@@ -1,3 +1,5 @@
+#pragma once
+
 #include <optional>
 #include <sstream>
 #include <string>
@@ -17,3 +19,4 @@ Light ParsePointLight(std::istringstream& ss);
 std::vector<FaceToken> ParseFace(std::istringstream& ss);
 std::string ParseMaterialPath(std::istringstream& ss);
 std::string ParseMaterialName(std::istringstream& ss);
+double ParseScalar(std::istringstream& ss);

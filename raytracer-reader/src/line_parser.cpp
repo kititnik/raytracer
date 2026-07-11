@@ -53,6 +53,13 @@ std::string ParseMaterialName(std::istringstream& ss) {
     return material_name;
 }
 
+double ParseScalar(std::istringstream& ss) {
+    double value = 0;
+    ss >> value;
+    TryStream(ss, "Error parsing scalar", __FILE__, __LINE__);
+    return value;
+}
+
 void TryStream(std::istringstream& ss, std::string error_msg, std::string file, int line) {
     if (ss.fail()) {
         throw std::runtime_error(std::format("{} {}:{}", error_msg, file, line));

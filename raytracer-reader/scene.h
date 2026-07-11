@@ -1,7 +1,6 @@
 #pragma once
 
 #include "material.h"
-#include "vector.h"
 #include "object.h"
 #include "light.h"
 
