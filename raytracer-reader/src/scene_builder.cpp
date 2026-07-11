@@ -69,7 +69,7 @@ void SceneBuilder::AddPointLight(std::istringstream& ss) {
 void SceneBuilder::AddMtLib(std::istringstream& ss) {
     std::string mtl_path = ParseMaterialPath(ss);
     auto mats = ReadMaterials(path_.parent_path().append(mtl_path));
-    materials_.insert_range(mats);
+    materials_.insert(mats.begin(), mats.end());
 }
 
 void SceneBuilder::AddUseMtl(std::istringstream& ss) {
