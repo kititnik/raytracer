@@ -1,5 +1,8 @@
 #pragma once
 
+#include "depth_renderer.h"
+#include "full_renderer.h"
+#include "normal_renderer.h"
 #include "ray.h"
 #include "options/camera_options.h"
 #include "options/render_options.h"
@@ -31,6 +34,9 @@ Image Render(const std::filesystem::path& path, const CameraOptions& camera_opti
     } else if (render_options.mode == RenderMode::kDepth) {
         renderer = std::make_unique<DepthRenderer>(camera_options.screen_width,
                                                    camera_options.screen_height);
+    } else if (render_options.mode == RenderMode::kFull) {
+        renderer = std::make_unique<FullRenderer>(
+            camera_options.screen_width, camera_options.screen_height, render_options.depth);
     } else {
         throw std::runtime_error("There is no such render mode. Expected kNormal/kDepth/kFull");
     }
