@@ -26,6 +26,7 @@ add_executable(raytracer
     src/render/full_renderer.cpp
     src/render/normal_renderer.cpp
     src/render/raytracer.cpp
+    src/image/image.cpp
     apps/cli/main.cpp
 )
 
@@ -36,3 +37,6 @@ target_include_directories(raytracer PRIVATE
     src/render/options
     src/image
 )
+
+find_package(PNG REQUIRED)
+target_link_libraries(raytracer PRIVATE PNG::PNG)
