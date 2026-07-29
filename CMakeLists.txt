@@ -22,6 +22,7 @@ add_executable(raytracer
     src/scene/object.cpp
     src/scene/scene.cpp
     src/scene/scene_builder.cpp
+    src/render/depth_renderer.cpp
     src/render/mode_handler.cpp
     src/render/full_renderer.cpp
     src/render/normal_renderer.cpp
