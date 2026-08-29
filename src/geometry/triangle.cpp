@@ -11,3 +11,7 @@ const Vector& Triangle::operator[](size_t ind) const {
 double Triangle::Area() const {
     return Length(CrossProduct(sides_[1] - sides_[0], sides_[2] - sides_[0])) / 2;
 }
+
+Vector Triangle::Centroid() const {
+    return (1.0 / 3.0) * (sides_[0] + sides_[1] + sides_[2]);
+}

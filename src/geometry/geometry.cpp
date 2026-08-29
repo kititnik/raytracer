@@ -1,9 +1,44 @@
 #include "geometry.hpp"
+#include <algorithm>
 #include <cmath>
+#include <cstddef>
 #include <optional>
 #include "intersection.hpp"
 #include "triangle.hpp"
 #include "vector.hpp"
+
+std::optional<Intersection> GetIntersection(const Ray& ray, const Box& box) {
+    double t_near = -std::numeric_limits<double>::infinity();
+    double t_far = std::numeric_limits<double>::infinity();
+
+    for (size_t i = 0; i < 3; ++i) {
+        double origin = ray.GetOrigin()[i];
+        double dir = ray.GetDirection()[i];
+
+        if (std::fabs(dir) < 1e-9) {
+            if (origin < box.GetMin()[i] || origin > box.GetMax()[i]) {
+                return std::nullopt;
+            }
+            continue;
+        }
+
+        double t1 = (box.GetMin()[i] - origin) / dir;
+        double t2 = (box.GetMax()[i] - origin) / dir;
+        if (t1 > t2) {
+            std::swap(t1, t2);
+        }
+        t_near = std::max(t_near, t1);
+        t_far = std::min(t_far, t2);
+        if (t_near > t_far) {
+            return std::nullopt;
+        }
+    }
+    if(t_far < 0) {
+        return std::nullopt;
+    }
+    Vector position = ray.GetOrigin() + t_near * ray.GetDirection();
+    return Intersection(position, Vector(), t_near);
+}
 
 std::optional<Intersection> GetIntersection(const Ray& ray, const Sphere& sphere) {
     // Substitute the ray equation into the sphere equation and get a quadratic equation
