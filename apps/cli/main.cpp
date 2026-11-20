@@ -1,7 +1,9 @@
 #include "raytracer.hpp"
 
 #include <getopt.h>
+#include <chrono>
 #include <filesystem>
+#include <format>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -17,6 +19,7 @@ int main(int argc, char* argv[]) {
     CameraOptions camera{};
     RenderOptions render{};
     render.depth = 5;
+    bool print_timings = false;
 
     static const option long_options[] = {
         {"input",     required_argument, nullptr, 'i'},
@@ -27,6 +30,7 @@ int main(int argc, char* argv[]) {
         {"depth",     required_argument, nullptr, 'd'},
         {"look-from", required_argument, nullptr,  2 },
         {"look-to",   required_argument, nullptr,  3 },
+        {"timings",   no_argument,       nullptr,  4 },
         {"help",      no_argument,       nullptr,  1 },
         {nullptr,     0,                 nullptr,  0 },
     };
@@ -42,6 +46,7 @@ int main(int argc, char* argv[]) {
             case 'd': render.depth = std::stoi(optarg); break;
             case 2:   camera.look_from = ParseVec3(optarg); break;
             case 3:   camera.look_to   = ParseVec3(optarg); break;
+            case 4:   print_timings = true; break;
             case 1:   PrintHelp(argv[0]); return 0;
             case '?': PrintHelp(argv[0]); return 1;
         }
@@ -53,9 +58,23 @@ int main(int argc, char* argv[]) {
     }
 
     try {
+        using Clock = std::chrono::steady_clock;
+        using Ms = std::chrono::duration<double, std::milli>;
+
+        auto start = Clock::now();
         Scene scene = ReadScene(input);
+        auto parsed = Clock::now();
         Image image = Render(scene, camera, render);
+        auto rendered = Clock::now();
         image.WriteImage(output);
+        auto written = Clock::now();
+
+        if (print_timings) {
+            std::cerr << std::format(R"({{"parse_ms":{:.3f},"render_ms":{:.3f},"write_ms":{:.3f}}})",
+                                     Ms(parsed - start).count(), Ms(rendered - parsed).count(),
+                                     Ms(written - rendered).count())
+                      << "\n";
+        }
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << "\n";
         return 1;
@@ -104,5 +123,6 @@ static void PrintHelp(const char* program) {
               << "  -d, --depth     <int>               Ray recursion depth (default: 5)\n"
               << "      --look-from <x,y,z>             Camera position (default: 0,0,0)\n"
               << "      --look-to   <x,y,z>             Camera target (default: 0,0,-1)\n"
+              << "      --timings                       Print phase timings as JSON to stderr\n"
               << "      --help                          Show this help\n";
 }
