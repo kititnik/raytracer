@@ -1,0 +1,34 @@
+# Benchmark scenes for bench/run.py.
+# Paths are relative to the project root.
+
+[tolerance]
+# Per-channel difference (0-255) that counts as floating-point noise.
+# Color values are truncated to int, so any tiny change near an integer
+# boundary flips a channel by exactly 1.
+channel = 1
+# Share of pixels allowed to differ by more than `channel`. Covers discrete
+# flips: silhouettes, triangle edges, grazing shadow rays.
+max_bad_fraction = 0.001
+
+[[scene]]
+name = "cornell-1024"
+input = "models/cornell-box/cornell_box.obj"
+width = 1024
+height = 1024
+look_from = "278,274,-290"
+look_to = "278,274,280"
+
+[[scene]]
+name = "bunny-64"
+input = "models/bunny/bunny.obj"
+width = 64
+height = 64
+look_from = "0.06,0.15,0.15"
+look_to = "-0.017,0.11,0"
+
+[[scene]]
+name = "parse-sponza"
+input = "models/sponza/sponza.obj"
+width = 1
+height = 1
+check_image = false

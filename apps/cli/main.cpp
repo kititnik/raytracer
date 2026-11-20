@@ -4,6 +4,7 @@
 #include <chrono>
 #include <filesystem>
 #include <format>
+#include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -19,7 +20,7 @@ int main(int argc, char* argv[]) {
     CameraOptions camera{};
     RenderOptions render{};
     render.depth = 5;
-    bool print_timings = false;
+    std::filesystem::path timings_path;
 
     static const option long_options[] = {
         {"input",     required_argument, nullptr, 'i'},
@@ -30,7 +31,7 @@ int main(int argc, char* argv[]) {
         {"depth",     required_argument, nullptr, 'd'},
         {"look-from", required_argument, nullptr,  2 },
         {"look-to",   required_argument, nullptr,  3 },
-        {"timings",   no_argument,       nullptr,  4 },
+        {"timings",   required_argument, nullptr,  4 },
         {"help",      no_argument,       nullptr,  1 },
         {nullptr,     0,                 nullptr,  0 },
     };
@@ -46,7 +47,7 @@ int main(int argc, char* argv[]) {
             case 'd': render.depth = std::stoi(optarg); break;
             case 2:   camera.look_from = ParseVec3(optarg); break;
             case 3:   camera.look_to   = ParseVec3(optarg); break;
-            case 4:   print_timings = true; break;
+            case 4:   timings_path = optarg; break;
             case 1:   PrintHelp(argv[0]); return 0;
             case '?': PrintHelp(argv[0]); return 1;
         }
@@ -69,11 +70,15 @@ int main(int argc, char* argv[]) {
         image.WriteImage(output);
         auto written = Clock::now();
 
-        if (print_timings) {
-            std::cerr << std::format(R"({{"parse_ms":{:.3f},"render_ms":{:.3f},"write_ms":{:.3f}}})",
-                                     Ms(parsed - start).count(), Ms(rendered - parsed).count(),
-                                     Ms(written - rendered).count())
-                      << "\n";
+        if (!timings_path.empty()) {
+            std::ofstream timings_file(timings_path, std::ios::app);
+            if (!timings_file) {
+                throw std::runtime_error("Error opening timings file: " + timings_path.string());
+            }
+            timings_file << std::format(R"({{"parse_ms":{:.3f},"render_ms":{:.3f},"write_ms":{:.3f}}})",
+                                        Ms(parsed - start).count(), Ms(rendered - parsed).count(),
+                                        Ms(written - rendered).count())
+                         << "\n";
         }
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << "\n";
@@ -123,6 +128,6 @@ static void PrintHelp(const char* program) {
               << "  -d, --depth     <int>               Ray recursion depth (default: 5)\n"
               << "      --look-from <x,y,z>             Camera position (default: 0,0,0)\n"
               << "      --look-to   <x,y,z>             Camera target (default: 0,0,-1)\n"
-              << "      --timings                       Print phase timings as JSON to stderr\n"
+              << "      --timings   <path>              Append phase timings as a JSON line to file\n"
               << "      --help                          Show this help\n";
 }
