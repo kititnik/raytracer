@@ -13,6 +13,10 @@ class Scene {
 public:
     Scene(std::vector<Object> objects, std::vector<SphereObject> sphere_objects,
           std::vector<Light> lights, std::unordered_map<std::string, Material> materials);
+    Scene(const Scene&) = delete;
+    Scene& operator=(const Scene&) = delete;
+    Scene(Scene&&) = default;
+    Scene& operator=(Scene&&) = default;
     const std::vector<Object>& GetObjects() const;
     const std::vector<SphereObject>& GetSphereObjects() const;
     const std::vector<Light>& GetLights() const;

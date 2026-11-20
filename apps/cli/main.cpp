@@ -1,6 +1,7 @@
 #include "raytracer.hpp"
 
 #include <getopt.h>
+#include <filesystem>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -37,7 +38,7 @@ int main(int argc, char* argv[]) {
             case 'o': output = optarg; break;
             case 'w': camera.screen_width = std::stoi(optarg); break;
             case 'h': camera.screen_height = std::stoi(optarg); break;
-            case 'm': ParseRenderMode(optarg); break;
+            case 'm': render.mode = ParseRenderMode(optarg); break;
             case 'd': render.depth = std::stoi(optarg); break;
             case 2:   camera.look_from = ParseVec3(optarg); break;
             case 3:   camera.look_to   = ParseVec3(optarg); break;
@@ -52,7 +53,8 @@ int main(int argc, char* argv[]) {
     }
 
     try {
-        Image image = Render(input, camera, render);
+        Scene scene = ReadScene(input);
+        Image image = Render(scene, camera, render);
         image.WriteImage(output);
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << "\n";
@@ -76,7 +78,7 @@ static Vector ParseVec3(const char* arg) {
 }
 
 static RenderMode ParseRenderMode(const char* arg) {
-    std::string_view mode = optarg;
+    std::string_view mode = arg;
     if (mode == "depth") {
         return RenderMode::kDepth;
     }

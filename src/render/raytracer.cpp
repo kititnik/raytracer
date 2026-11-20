@@ -8,13 +8,11 @@
 #include "normal_renderer.hpp"
 #include "ray.hpp"
 #include "mode_handler.hpp"
-#include "scene.hpp"
 
 std::unique_ptr<Renderer> GetRendererer(const RenderOptions& render_options, const CameraOptions& camera_options);
 
-Image Render(const std::filesystem::path& path, const CameraOptions& camera_options,
+Image Render(const Scene& scene, const CameraOptions& camera_options,
              const RenderOptions& render_options) {
-    Scene scene = ReadScene(path);
     auto [right, up, forward] = LookAt(camera_options);
 
     std::unique_ptr<Renderer> renderer = GetRendererer(render_options, camera_options);
